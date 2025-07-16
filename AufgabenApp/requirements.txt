@@ -1,0 +1,52 @@
+# KI-gestützte Projekt- und Aufgabenplanungssoftware
+# Requirements für Backend-Komponenten
+
+# Core Dependencies
+networkx>=3.1
+matplotlib>=3.7.0
+plotly>=5.15.0
+numpy>=1.24.0
+
+# HTTP Client für API-Calls
+httpx>=0.24.0
+
+# Data Processing
+pandas>=2.0.0
+
+# Database Connectors
+neo4j>=5.8.0
+psycopg2-binary>=2.9.0
+
+# Environment Management
+python-dotenv>=1.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Development Tools
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.4.0
+
+# Optional: Enhanced Graph Layouts (requires Graphviz installation)
+# pygraphviz>=1.11
+
+# Optional: FastAPI für Web-Backend (wenn gewünscht)
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+
+# Optional: GraphQL Support
+strawberry-graphql>=0.200.0
+
+# Optional: LangChain für erweiterte LLM-Integration
+langchain>=0.0.200
+langchain-openai>=0.0.5
+langchain-anthropic>=0.0.4
+
+# Optional: Jupyter für Entwicklung und Testing
+jupyter>=1.0.0
+ipykernel>=6.23.0
+
+# Optional: Redis für Caching
+redis>=4.5.0

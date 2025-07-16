@@ -1,0 +1,869 @@
+[
+  {
+    "data": {
+      "id": "34896a58-e41a-4e41-a0f8-7f52b970aa70",
+      "label": "we have oracle Forms Application and want to migrate client java version from 8 to 17",
+      "type": "objective",
+      "description": "we have oracle Forms Application and want to migrate client java version from 8 to 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "objective"
+  },
+  {
+    "data": {
+      "id": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "label": "Oracle Forms Application Java Migration",
+      "type": "project",
+      "description": "Migration of client Java version from 8 to 17 in Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "project"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "label": "Initial assessment",
+      "type": "task",
+      "description": "Assess the current configuration of the application and identify dependencies",
+      "estimated_hours": 16,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "cf8f834a-20fe-4e3f-81c7-b519126969c5",
+      "label": "Project Manager",
+      "type": "actor",
+      "description": "actor: Project Manager",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "db2cc782-1ff9-4646-9a31-a707cb641803",
+      "label": "Technical Lead",
+      "type": "actor",
+      "description": "actor: Technical Lead",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "0e4819b9-bc0c-43d9-8abb-11adf38ecf6d",
+      "label": "Oracle Forms Application",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "94b97529-8936-4ef8-8d2b-48f7f6466c37",
+      "label": "Existing codebase",
+      "type": "object",
+      "description": "object: Existing codebase",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "24ee90d4-29e2-4bb6-8f16-f7368ba1cc9e",
+      "label": "Knowledge of Oracle Forms",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "4b614415-be0b-41e3-bed3-4d58c8492cad",
+      "label": "Knowledge of Java 8",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 8",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "f2ac65ac-b92d-47fd-a7dd-77194567ab64",
+      "label": "Budget: 2000€",
+      "type": "budget",
+      "description": "Budgetbedarf: 2000€",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "label": "Set up development environment",
+      "type": "task",
+      "description": "Set up a separate development environment for the migration process",
+      "estimated_hours": 8,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "5be9b8f7-fd14-48a1-9bd3-87d76da74187",
+      "label": "System Administrator",
+      "type": "actor",
+      "description": "actor: System Administrator",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "e1b91bde-f66e-4428-ba87-e7aed06da3b1",
+      "label": "Development server",
+      "type": "object",
+      "description": "object: Development server",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "c4eb20d5-368f-4d94-b7c2-c3bfd5f1ed4d",
+      "label": "Oracle Forms Application",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "5c1bb7a3-1bc5-403d-85c3-80d2984994bd",
+      "label": "Java 17",
+      "type": "object",
+      "description": "object: Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "ffab123b-2727-48d9-9b6d-981793524eaa",
+      "label": "System administration skills",
+      "type": "knowledge",
+      "description": "knowledge: System administration skills",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "b15f7577-3372-4c02-988c-b1b4204f0cba",
+      "label": "Knowledge of Oracle Forms",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "3554122c-7de2-4808-a8c4-c7a45463a0b8",
+      "label": "Knowledge of Java 17",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "840fb8cd-1ca9-4ef9-bfa3-2d9a4bfb9393",
+      "label": "Budget: 1000€",
+      "type": "budget",
+      "description": "Budgetbedarf: 1000€",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "label": "Code migration",
+      "type": "task",
+      "description": "Migrate the existing codebase to Java 17",
+      "estimated_hours": 40,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "335baff8-1c04-4144-95f0-c26447636b89",
+      "label": "Java Developer",
+      "type": "actor",
+      "description": "actor: Java Developer",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "6c93905a-c9a5-4e2c-be3a-e088e913d816",
+      "label": "Oracle Forms Application",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "2f688b75-73e5-4bec-8697-c0f311571e2b",
+      "label": "Java 17",
+      "type": "object",
+      "description": "object: Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "bdf18f11-2cad-4e34-894b-80fa96cd3096",
+      "label": "Knowledge of Oracle Forms",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "d793b94e-d851-4369-bba2-d65ff7bb83ac",
+      "label": "Knowledge of Java 17",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "af0cb6a6-efcf-48cd-bda7-073e7203c14b",
+      "label": "Budget: 5000€",
+      "type": "budget",
+      "description": "Budgetbedarf: 5000€",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "label": "Testing",
+      "type": "task",
+      "description": "Test the application to ensure it functions as expected after migration",
+      "estimated_hours": 24,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "38e4775f-b762-42a7-8dcb-0f3e7b992875",
+      "label": "Quality Assurance Specialist",
+      "type": "actor",
+      "description": "actor: Quality Assurance Specialist",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "0c77265e-0d20-4eb5-a1c4-5119beef6709",
+      "label": "Oracle Forms Application",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "230a1d5e-37bb-4b7e-9ce2-16f2ceb882f9",
+      "label": "Test cases",
+      "type": "object",
+      "description": "object: Test cases",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "996246af-6809-4d72-aba0-ba1a623088a0",
+      "label": "Testing skills",
+      "type": "knowledge",
+      "description": "knowledge: Testing skills",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "d7daaa18-8696-4384-9067-052f3c64d31b",
+      "label": "Knowledge of Oracle Forms",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "941a6096-bcaa-44cd-9a22-9e18e33a490d",
+      "label": "Knowledge of Java 17",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "77a97bca-bc83-4aa8-b7dd-74ced2757f53",
+      "label": "Budget: 3000€",
+      "type": "budget",
+      "description": "Budgetbedarf: 3000€",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99",
+      "label": "Deployment",
+      "type": "task",
+      "description": "Deploy the migrated application to the production environment",
+      "estimated_hours": 4,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "1689b131-b381-4c70-a5d0-000f81379f65",
+      "label": "System Administrator",
+      "type": "actor",
+      "description": "actor: System Administrator",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "a3013bc1-89a4-4179-b28e-81cda3cd5586",
+      "label": "Oracle Forms Application",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "a6d3db34-daab-4f1c-bad0-2f11d863896e",
+      "label": "Production server",
+      "type": "object",
+      "description": "object: Production server",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "555ea994-40c4-4df5-93b5-df0ae0ba13de",
+      "label": "System administration skills",
+      "type": "knowledge",
+      "description": "knowledge: System administration skills",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "8c503ef6-d6da-4b45-9f88-93c808ffa49c",
+      "label": "Knowledge of Oracle Forms",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "f29f4e1c-4603-454c-8a4a-b07d249f79cb",
+      "label": "Knowledge of Java 17",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "a155b3aa-c2d6-40ef-b303-6e900dcdcd18",
+      "label": "Budget: 1000€",
+      "type": "budget",
+      "description": "Budgetbedarf: 1000€",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "34896a58-e41a-4e41-a0f8-7f52b970aa70-34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "source": "34896a58-e41a-4e41-a0f8-7f52b970aa70",
+      "target": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241-15401de8-7c9b-4111-b2da-2bf936a517be",
+      "source": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "target": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241-aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "source": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "target": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241-b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "source": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "target": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241-afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "source": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "target": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241-89008c0d-d976-4439-aa64-24070327bc99",
+      "source": "34e2072f-2d3a-47c0-9c9a-42ba1c94c241",
+      "target": "89008c0d-d976-4439-aa64-24070327bc99",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-cf8f834a-20fe-4e3f-81c7-b519126969c5",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "cf8f834a-20fe-4e3f-81c7-b519126969c5",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-db2cc782-1ff9-4646-9a31-a707cb641803",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "db2cc782-1ff9-4646-9a31-a707cb641803",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-0e4819b9-bc0c-43d9-8abb-11adf38ecf6d",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "0e4819b9-bc0c-43d9-8abb-11adf38ecf6d",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-94b97529-8936-4ef8-8d2b-48f7f6466c37",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "94b97529-8936-4ef8-8d2b-48f7f6466c37",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-24ee90d4-29e2-4bb6-8f16-f7368ba1cc9e",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "24ee90d4-29e2-4bb6-8f16-f7368ba1cc9e",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-4b614415-be0b-41e3-bed3-4d58c8492cad",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "4b614415-be0b-41e3-bed3-4d58c8492cad",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-f2ac65ac-b92d-47fd-a7dd-77194567ab64",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "f2ac65ac-b92d-47fd-a7dd-77194567ab64",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "15401de8-7c9b-4111-b2da-2bf936a517be-aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "source": "15401de8-7c9b-4111-b2da-2bf936a517be",
+      "target": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-5be9b8f7-fd14-48a1-9bd3-87d76da74187",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "5be9b8f7-fd14-48a1-9bd3-87d76da74187",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-e1b91bde-f66e-4428-ba87-e7aed06da3b1",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "e1b91bde-f66e-4428-ba87-e7aed06da3b1",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-c4eb20d5-368f-4d94-b7c2-c3bfd5f1ed4d",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "c4eb20d5-368f-4d94-b7c2-c3bfd5f1ed4d",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-5c1bb7a3-1bc5-403d-85c3-80d2984994bd",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "5c1bb7a3-1bc5-403d-85c3-80d2984994bd",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-ffab123b-2727-48d9-9b6d-981793524eaa",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "ffab123b-2727-48d9-9b6d-981793524eaa",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-b15f7577-3372-4c02-988c-b1b4204f0cba",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "b15f7577-3372-4c02-988c-b1b4204f0cba",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-3554122c-7de2-4808-a8c4-c7a45463a0b8",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "3554122c-7de2-4808-a8c4-c7a45463a0b8",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-840fb8cd-1ca9-4ef9-bfa3-2d9a4bfb9393",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "840fb8cd-1ca9-4ef9-bfa3-2d9a4bfb9393",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "aff9be7e-2972-4ca1-978c-e1273b35ecff-b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "source": "aff9be7e-2972-4ca1-978c-e1273b35ecff",
+      "target": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33-335baff8-1c04-4144-95f0-c26447636b89",
+      "source": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "target": "335baff8-1c04-4144-95f0-c26447636b89",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33-6c93905a-c9a5-4e2c-be3a-e088e913d816",
+      "source": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "target": "6c93905a-c9a5-4e2c-be3a-e088e913d816",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33-2f688b75-73e5-4bec-8697-c0f311571e2b",
+      "source": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "target": "2f688b75-73e5-4bec-8697-c0f311571e2b",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33-bdf18f11-2cad-4e34-894b-80fa96cd3096",
+      "source": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "target": "bdf18f11-2cad-4e34-894b-80fa96cd3096",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33-d793b94e-d851-4369-bba2-d65ff7bb83ac",
+      "source": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "target": "d793b94e-d851-4369-bba2-d65ff7bb83ac",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33-af0cb6a6-efcf-48cd-bda7-073e7203c14b",
+      "source": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "target": "af0cb6a6-efcf-48cd-bda7-073e7203c14b",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "b9273462-469b-4d4b-92fd-622d75d8ad33-afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "source": "b9273462-469b-4d4b-92fd-622d75d8ad33",
+      "target": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-38e4775f-b762-42a7-8dcb-0f3e7b992875",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "38e4775f-b762-42a7-8dcb-0f3e7b992875",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-0c77265e-0d20-4eb5-a1c4-5119beef6709",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "0c77265e-0d20-4eb5-a1c4-5119beef6709",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-230a1d5e-37bb-4b7e-9ce2-16f2ceb882f9",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "230a1d5e-37bb-4b7e-9ce2-16f2ceb882f9",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-996246af-6809-4d72-aba0-ba1a623088a0",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "996246af-6809-4d72-aba0-ba1a623088a0",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-d7daaa18-8696-4384-9067-052f3c64d31b",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "d7daaa18-8696-4384-9067-052f3c64d31b",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-941a6096-bcaa-44cd-9a22-9e18e33a490d",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "941a6096-bcaa-44cd-9a22-9e18e33a490d",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-77a97bca-bc83-4aa8-b7dd-74ced2757f53",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "77a97bca-bc83-4aa8-b7dd-74ced2757f53",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "afc875fa-ae0d-4962-86d5-c2e0b50319dc-89008c0d-d976-4439-aa64-24070327bc99",
+      "source": "afc875fa-ae0d-4962-86d5-c2e0b50319dc",
+      "target": "89008c0d-d976-4439-aa64-24070327bc99",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99-1689b131-b381-4c70-a5d0-000f81379f65",
+      "source": "89008c0d-d976-4439-aa64-24070327bc99",
+      "target": "1689b131-b381-4c70-a5d0-000f81379f65",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99-a3013bc1-89a4-4179-b28e-81cda3cd5586",
+      "source": "89008c0d-d976-4439-aa64-24070327bc99",
+      "target": "a3013bc1-89a4-4179-b28e-81cda3cd5586",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99-a6d3db34-daab-4f1c-bad0-2f11d863896e",
+      "source": "89008c0d-d976-4439-aa64-24070327bc99",
+      "target": "a6d3db34-daab-4f1c-bad0-2f11d863896e",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99-555ea994-40c4-4df5-93b5-df0ae0ba13de",
+      "source": "89008c0d-d976-4439-aa64-24070327bc99",
+      "target": "555ea994-40c4-4df5-93b5-df0ae0ba13de",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99-8c503ef6-d6da-4b45-9f88-93c808ffa49c",
+      "source": "89008c0d-d976-4439-aa64-24070327bc99",
+      "target": "8c503ef6-d6da-4b45-9f88-93c808ffa49c",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99-f29f4e1c-4603-454c-8a4a-b07d249f79cb",
+      "source": "89008c0d-d976-4439-aa64-24070327bc99",
+      "target": "f29f4e1c-4603-454c-8a4a-b07d249f79cb",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "89008c0d-d976-4439-aa64-24070327bc99-a155b3aa-c2d6-40ef-b303-6e900dcdcd18",
+      "source": "89008c0d-d976-4439-aa64-24070327bc99",
+      "target": "a155b3aa-c2d6-40ef-b303-6e900dcdcd18",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  }
+]

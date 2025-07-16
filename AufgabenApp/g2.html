@@ -1,0 +1,1352 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Graph aus plan_we_have_oracle_Forms.json</title>
+    <script src="https://unpkg.com/cytoscape@3.26.0/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-dagre@2.5.0/cytoscape-dagre.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        #cy {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        button {
+            background-color: #4ECDC4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background-color: #45B7D1;
+        }
+        
+        .info-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            max-width: 300px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .info-panel h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .legend {
+            margin-top: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Graph aus plan_we_have_oracle_Forms.json</h1>
+    
+    <div class="controls">
+        <button onclick="resetView()">🔄 Ansicht zurücksetzen</button>
+        <button onclick="fitToScreen()">🔍 An Bildschirm anpassen</button>
+        <button onclick="toggleLayout()">📐 Layout wechseln</button>
+        <button onclick="exportImage()">📸 Bild exportieren</button>
+    </div>
+    
+    <div id="cy"></div>
+    
+    <div id="info-panel" class="info-panel">
+        <h3>Knoten-Information</h3>
+        <div id="node-info"></div>
+    </div>
+    
+    <div class="legend">
+        <h3>Legende</h3>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #FF6B6B;"><i class="fas fa-flag"></i></div>
+            <span>Ziel (Objective)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #4ECDC4;"><i class="fas fa-folder"></i></div>
+            <span>Projekt (Project)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #45B7D1;"><i class="fas fa-tasks"></i></div>
+            <span>Aufgabe (Task)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #96CEB4;"><i class="fas fa-user"></i></div>
+            <span>Akteur (Actor)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #FFEAA7;"><i class="fas fa-cube"></i></div>
+            <span>Objekt (Object)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #DDA0DD;"><i class="fas fa-book"></i></div>
+            <span>Wissen (Knowledge)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #F39C12;"><i class="fas fa-dollar-sign"></i></div>
+            <span>Budget</span>
+        </div>
+    </div>
+    
+    <script>
+        var cy;
+        var currentLayout = 'dagre';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Register dagre extension
+            if (typeof cytoscape === 'function' && typeof dagre !== 'undefined') {
+                cytoscape.use(cytoscapeDagre);
+            }
+            
+            cy = cytoscape({
+                container: document.getElementById('cy'),
+                
+                elements: [
+  {
+    "data": {
+      "id": "2ad3d8d1-0f36-4f99-a31a-e75f74041a55",
+      "label": "we have oracle Forms Application and want to migrate client java version from 8 to 17",
+      "icon": "\uf3a5",
+      "type": "objective",
+      "description": "we have oracle Forms Application and want to migrate client java version from 8 to 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "objective"
+  },
+  {
+    "data": {
+      "id": "a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "label": "Oracle Forms Application Java Migration",
+      "icon": "\uf07b",
+      "type": "project",
+      "description": "Migration of client Java version from 8 to 17 in Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "project"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "label": "Initial assessment",
+      "icon": "\uf0ae",
+      "type": "task",
+      "description": "Assess the current configuration of the application and identify dependencies",
+      "estimated_hours": 16,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "91a15bd7-c1d9-46b0-8472-44128bc531ea",
+      "label": "Project Manager",
+      "icon": "\uf007",
+      "type": "actor",
+      "description": "actor: Project Manager",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "60759b98-f269-4342-863c-ac49b712ed44",
+      "label": "Technical Lead",
+      "icon": "\uf007",
+      "type": "actor",
+      "description": "actor: Technical Lead",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "93567b92-9f07-4299-8d11-cf66c6995488",
+      "label": "Oracle Forms Application",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "b54f8751-55c3-45b2-9728-836359110788",
+      "label": "Existing codebase",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Existing codebase",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "5bffce24-4e26-4d53-ae3c-4a6accb313de",
+      "label": "Knowledge of Oracle Forms",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "d6f03e04-7d0a-47c5-b4ec-38a8479c369d",
+      "label": "Knowledge of Java 8",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 8",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "a8611c62-9672-428a-bd47-e0e34dacb28c",
+      "label": "Budget: 2000\u20ac",
+      "icon": "\uf155",
+      "type": "budget",
+      "description": "Budgetbedarf: 2000\u20ac",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "label": "Set up development environment",
+      "icon": "\uf0ae",
+      "type": "task",
+      "description": "Set up a separate development environment for the migration process",
+      "estimated_hours": 8,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "ede32d34-f7fa-475b-8479-b83697106ca7",
+      "label": "System Administrator",
+      "icon": "\uf007",
+      "type": "actor",
+      "description": "actor: System Administrator",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "e147b474-671c-40ba-be9b-db9f9a2c1d04",
+      "label": "Development server",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Development server",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "8aa8b3dc-f010-4a23-988a-b9dedc5f1598",
+      "label": "Oracle Forms Application",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "a75dfb54-307c-43c1-8df2-3378018e32a9",
+      "label": "Java 17",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "e188adbb-358d-4494-ae83-bc0269dc0217",
+      "label": "System administration skills",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: System administration skills",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "38418a5c-2e2d-42c6-9d9f-adb98050c1c4",
+      "label": "Knowledge of Oracle Forms",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "691c52be-28e9-4105-8e60-2fbe2bdc4849",
+      "label": "Knowledge of Java 17",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "d3d871ad-d0e4-4b59-b84e-4f1bc75401ff",
+      "label": "Budget: 1000\u20ac",
+      "icon": "\uf155",
+      "type": "budget",
+      "description": "Budgetbedarf: 1000\u20ac",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "label": "Code migration",
+      "icon": "\uf0ae",
+      "type": "task",
+      "description": "Migrate the existing codebase to Java 17",
+      "estimated_hours": 40,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "172bc92f-cf9f-472f-9bad-b0bebc3abcff",
+      "label": "Java Developer",
+      "icon": "\uf007",
+      "type": "actor",
+      "description": "actor: Java Developer",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "cce07f25-e1aa-404b-adcd-6a92d5ea26b9",
+      "label": "Oracle Forms Application",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "03139b8e-f857-449d-954a-5fece4f29419",
+      "label": "Java 17",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "41599c4c-dc19-4696-9fff-e1d77c5becfc",
+      "label": "Knowledge of Oracle Forms",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "26c971f1-59e6-4746-8ce6-d01c8a300a63",
+      "label": "Knowledge of Java 17",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "47dd625e-a387-45ac-9894-0934b46d812a",
+      "label": "Budget: 5000\u20ac",
+      "icon": "\uf155",
+      "type": "budget",
+      "description": "Budgetbedarf: 5000\u20ac",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "label": "Testing",
+      "icon": "\uf0ae",
+      "type": "task",
+      "description": "Test the application to ensure it functions as expected after migration",
+      "estimated_hours": 24,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "e1adaa93-d213-477e-a1e7-52c8239c985e",
+      "label": "Quality Assurance Specialist",
+      "icon": "\uf007",
+      "type": "actor",
+      "description": "actor: Quality Assurance Specialist",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "697c5d21-346d-46da-bf10-ed6924c0e57c",
+      "label": "Oracle Forms Application",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "dac34501-85d8-4d30-8660-e61c8d096529",
+      "label": "Test cases",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Test cases",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "39accea6-2e3b-416f-855d-13d1661e1327",
+      "label": "Testing skills",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Testing skills",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "2d7f47a1-19ac-4534-8147-b8c874c93e77",
+      "label": "Knowledge of Oracle Forms",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "124b2254-4bea-4661-bcf1-aab903bc1ac2",
+      "label": "Knowledge of Java 17",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "72b81d50-c323-4321-a60b-e674c94c9306",
+      "label": "Budget: 3000\u20ac",
+      "icon": "\uf155",
+      "type": "budget",
+      "description": "Budgetbedarf: 3000\u20ac",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "label": "Deployment",
+      "icon": "\uf0ae",
+      "type": "task",
+      "description": "Deploy the migrated application to the production environment",
+      "estimated_hours": 4,
+      "status": "pending"
+    },
+    "classes": "task"
+  },
+  {
+    "data": {
+      "id": "bc054f44-b38c-4f30-8632-014b142d36ee",
+      "label": "System Administrator",
+      "icon": "\uf007",
+      "type": "actor",
+      "description": "actor: System Administrator",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "actor"
+  },
+  {
+    "data": {
+      "id": "28fcfc62-ace1-434b-8e2d-a753ceb17120",
+      "label": "Oracle Forms Application",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Oracle Forms Application",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "98e42ca4-1148-4d77-b1d9-341e33d06a8a",
+      "label": "Production server",
+      "icon": "\uf1b2",
+      "type": "object",
+      "description": "object: Production server",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "object"
+  },
+  {
+    "data": {
+      "id": "96b8b9db-c55d-43fc-ad0a-3c238feb3dcc",
+      "label": "System administration skills",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: System administration skills",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "aa339ca2-9363-42fa-89ad-8b1a5cabe58d",
+      "label": "Knowledge of Oracle Forms",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Oracle Forms",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "6ac0ddd5-52a4-494b-bc1f-970cec4b505e",
+      "label": "Knowledge of Java 17",
+      "icon": "\uf02d",
+      "type": "knowledge",
+      "description": "knowledge: Knowledge of Java 17",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "knowledge"
+  },
+  {
+    "data": {
+      "id": "c84e3178-8d4e-4337-8e5a-cf30e8f45cad",
+      "label": "Budget: 1000\u20ac",
+      "icon": "\uf155",
+      "type": "budget",
+      "description": "Budgetbedarf: 1000\u20ac",
+      "estimated_hours": 0,
+      "status": "pending"
+    },
+    "classes": "budget"
+  },
+  {
+    "data": {
+      "id": "2ad3d8d1-0f36-4f99-a31a-e75f74041a55-a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "source": "2ad3d8d1-0f36-4f99-a31a-e75f74041a55",
+      "target": "a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "a43fb90d-dc23-4ada-bcb8-7e520f19b214-8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "source": "a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "target": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "a43fb90d-dc23-4ada-bcb8-7e520f19b214-f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "source": "a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "target": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "a43fb90d-dc23-4ada-bcb8-7e520f19b214-c93151b2-3566-4e5a-9070-2d54798df43b",
+      "source": "a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "target": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "a43fb90d-dc23-4ada-bcb8-7e520f19b214-dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "source": "a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "target": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "a43fb90d-dc23-4ada-bcb8-7e520f19b214-964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "source": "a43fb90d-dc23-4ada-bcb8-7e520f19b214",
+      "target": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "relationship": "CONTAINS"
+    },
+    "classes": "CONTAINS"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-91a15bd7-c1d9-46b0-8472-44128bc531ea",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "91a15bd7-c1d9-46b0-8472-44128bc531ea",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-60759b98-f269-4342-863c-ac49b712ed44",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "60759b98-f269-4342-863c-ac49b712ed44",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-93567b92-9f07-4299-8d11-cf66c6995488",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "93567b92-9f07-4299-8d11-cf66c6995488",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-b54f8751-55c3-45b2-9728-836359110788",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "b54f8751-55c3-45b2-9728-836359110788",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-5bffce24-4e26-4d53-ae3c-4a6accb313de",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "5bffce24-4e26-4d53-ae3c-4a6accb313de",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-d6f03e04-7d0a-47c5-b4ec-38a8479c369d",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "d6f03e04-7d0a-47c5-b4ec-38a8479c369d",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-a8611c62-9672-428a-bd47-e0e34dacb28c",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "a8611c62-9672-428a-bd47-e0e34dacb28c",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2-f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "source": "8018c055-d38d-46e2-8ca1-0be06cc6d5a2",
+      "target": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-ede32d34-f7fa-475b-8479-b83697106ca7",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "ede32d34-f7fa-475b-8479-b83697106ca7",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-e147b474-671c-40ba-be9b-db9f9a2c1d04",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "e147b474-671c-40ba-be9b-db9f9a2c1d04",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-8aa8b3dc-f010-4a23-988a-b9dedc5f1598",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "8aa8b3dc-f010-4a23-988a-b9dedc5f1598",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-a75dfb54-307c-43c1-8df2-3378018e32a9",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "a75dfb54-307c-43c1-8df2-3378018e32a9",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-e188adbb-358d-4494-ae83-bc0269dc0217",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "e188adbb-358d-4494-ae83-bc0269dc0217",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-38418a5c-2e2d-42c6-9d9f-adb98050c1c4",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "38418a5c-2e2d-42c6-9d9f-adb98050c1c4",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-691c52be-28e9-4105-8e60-2fbe2bdc4849",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "691c52be-28e9-4105-8e60-2fbe2bdc4849",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-d3d871ad-d0e4-4b59-b84e-4f1bc75401ff",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "d3d871ad-d0e4-4b59-b84e-4f1bc75401ff",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9-c93151b2-3566-4e5a-9070-2d54798df43b",
+      "source": "f973f4cf-f5f5-48ec-a1b4-61bae6cd06d9",
+      "target": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b-172bc92f-cf9f-472f-9bad-b0bebc3abcff",
+      "source": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "target": "172bc92f-cf9f-472f-9bad-b0bebc3abcff",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b-cce07f25-e1aa-404b-adcd-6a92d5ea26b9",
+      "source": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "target": "cce07f25-e1aa-404b-adcd-6a92d5ea26b9",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b-03139b8e-f857-449d-954a-5fece4f29419",
+      "source": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "target": "03139b8e-f857-449d-954a-5fece4f29419",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b-41599c4c-dc19-4696-9fff-e1d77c5becfc",
+      "source": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "target": "41599c4c-dc19-4696-9fff-e1d77c5becfc",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b-26c971f1-59e6-4746-8ce6-d01c8a300a63",
+      "source": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "target": "26c971f1-59e6-4746-8ce6-d01c8a300a63",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b-47dd625e-a387-45ac-9894-0934b46d812a",
+      "source": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "target": "47dd625e-a387-45ac-9894-0934b46d812a",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "c93151b2-3566-4e5a-9070-2d54798df43b-dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "source": "c93151b2-3566-4e5a-9070-2d54798df43b",
+      "target": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-e1adaa93-d213-477e-a1e7-52c8239c985e",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "e1adaa93-d213-477e-a1e7-52c8239c985e",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-697c5d21-346d-46da-bf10-ed6924c0e57c",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "697c5d21-346d-46da-bf10-ed6924c0e57c",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-dac34501-85d8-4d30-8660-e61c8d096529",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "dac34501-85d8-4d30-8660-e61c8d096529",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-39accea6-2e3b-416f-855d-13d1661e1327",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "39accea6-2e3b-416f-855d-13d1661e1327",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-2d7f47a1-19ac-4534-8147-b8c874c93e77",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "2d7f47a1-19ac-4534-8147-b8c874c93e77",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-124b2254-4bea-4661-bcf1-aab903bc1ac2",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "124b2254-4bea-4661-bcf1-aab903bc1ac2",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-72b81d50-c323-4321-a60b-e674c94c9306",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "72b81d50-c323-4321-a60b-e674c94c9306",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "dc799c98-3c73-4efe-8a6e-d4823012d17d-964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "source": "dc799c98-3c73-4efe-8a6e-d4823012d17d",
+      "target": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "relationship": "PRECEDES"
+    },
+    "classes": "PRECEDES"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802-bc054f44-b38c-4f30-8632-014b142d36ee",
+      "source": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "target": "bc054f44-b38c-4f30-8632-014b142d36ee",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802-28fcfc62-ace1-434b-8e2d-a753ceb17120",
+      "source": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "target": "28fcfc62-ace1-434b-8e2d-a753ceb17120",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802-98e42ca4-1148-4d77-b1d9-341e33d06a8a",
+      "source": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "target": "98e42ca4-1148-4d77-b1d9-341e33d06a8a",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802-96b8b9db-c55d-43fc-ad0a-3c238feb3dcc",
+      "source": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "target": "96b8b9db-c55d-43fc-ad0a-3c238feb3dcc",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802-aa339ca2-9363-42fa-89ad-8b1a5cabe58d",
+      "source": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "target": "aa339ca2-9363-42fa-89ad-8b1a5cabe58d",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802-6ac0ddd5-52a4-494b-bc1f-970cec4b505e",
+      "source": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "target": "6ac0ddd5-52a4-494b-bc1f-970cec4b505e",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  },
+  {
+    "data": {
+      "id": "964e7d1d-fd8e-4adc-b350-4463d38e8802-c84e3178-8d4e-4337-8e5a-cf30e8f45cad",
+      "source": "964e7d1d-fd8e-4adc-b350-4463d38e8802",
+      "target": "c84e3178-8d4e-4337-8e5a-cf30e8f45cad",
+      "relationship": "REQUIRES"
+    },
+    "classes": "REQUIRES"
+  }
+],
+                
+                style: [
+  {
+    "selector": "node",
+    "style": {
+      "content": "data(icon)",
+      "text-valign": "center",
+      "text-halign": "center",
+      "font-family": "FontAwesome, Arial, sans-serif",
+      "font-size": "24px",
+      "color": "#333",
+      "border-width": 2,
+      "border-color": "#000",
+      "text-wrap": "wrap",
+      "text-max-width": "100px",
+      "shape": "ellipse"
+    }
+  },
+  {
+    "selector": "node:selected",
+    "style": {
+      "content": "data(label)",
+      "font-size": "10px",
+      "font-family": "Arial, sans-serif",
+      "text-valign": "bottom",
+      "text-margin-y": "5px"
+    }
+  },
+  {
+    "selector": ".objective",
+    "style": {
+      "background-color": "#FF6B6B",
+      "width": "80px",
+      "height": "80px",
+      "content": "'\uf3a5'"
+    }
+  },
+  {
+    "selector": ".project",
+    "style": {
+      "background-color": "#4ECDC4",
+      "width": "60px",
+      "height": "60px",
+      "content": "'\uf07b'"
+    }
+  },
+  {
+    "selector": ".task",
+    "style": {
+      "background-color": "#45B7D1",
+      "width": "50px",
+      "height": "50px",
+      "content": "'\uf0ae'"
+    }
+  },
+  {
+    "selector": ".actor",
+    "style": {
+      "background-color": "#96CEB4",
+      "width": "40px",
+      "height": "40px",
+      "content": "'\uf007'"
+    }
+  },
+  {
+    "selector": ".object",
+    "style": {
+      "background-color": "#FFEAA7",
+      "width": "40px",
+      "height": "40px",
+      "content": "'\uf1b2'"
+    }
+  },
+  {
+    "selector": ".knowledge",
+    "style": {
+      "background-color": "#DDA0DD",
+      "width": "40px",
+      "height": "40px",
+      "content": "'\uf02d'"
+    }
+  },
+  {
+    "selector": ".budget",
+    "style": {
+      "background-color": "#F39C12",
+      "width": "40px",
+      "height": "40px",
+      "content": "'\uf155'"
+    }
+  },
+  {
+    "selector": "edge",
+    "style": {
+      "width": 3,
+      "line-color": "#ccc",
+      "target-arrow-color": "#ccc",
+      "target-arrow-shape": "triangle",
+      "curve-style": "bezier",
+      "arrow-scale": 1.5
+    }
+  },
+  {
+    "selector": ".CONTAINS",
+    "style": {
+      "line-color": "#2C3E50",
+      "target-arrow-color": "#2C3E50"
+    }
+  },
+  {
+    "selector": ".REQUIRES",
+    "style": {
+      "line-color": "#E74C3C",
+      "target-arrow-color": "#E74C3C"
+    }
+  },
+  {
+    "selector": ".PRECEDES",
+    "style": {
+      "line-color": "#9B59B6",
+      "target-arrow-color": "#9B59B6"
+    }
+  },
+  {
+    "selector": "node:selected",
+    "style": {
+      "border-width": 4,
+      "border-color": "#000"
+    }
+  },
+  {
+    "selector": "node:active",
+    "style": {
+      "overlay-opacity": 0.2,
+      "overlay-color": "#000"
+    }
+  }
+],
+                
+                layout: {
+                    name: 'dagre',
+                    directed: true,
+                    padding: 20,
+                    rankDir: 'TB',
+                    ranker: 'longest-path'
+                }
+            });
+            
+            console.log('Cytoscape initialized with', cy.nodes().length, 'nodes and', cy.edges().length, 'edges');
+            
+            // Event-Handler für Knoten-Klick
+            cy.on('tap', 'node', function(event) {
+                var node = event.target;
+                var data = node.data();
+                
+                var infoPanel = document.getElementById('info-panel');
+                var nodeInfo = document.getElementById('node-info');
+                
+                var html = '<strong>' + data.label + '</strong><br>';
+                html += 'Typ: ' + data.type + '<br>';
+                if (data.description) html += 'Beschreibung: ' + data.description + '<br>';
+                if (data.estimated_hours) html += 'Geschätzte Stunden: ' + data.estimated_hours + '<br>';
+                if (data.status) html += 'Status: ' + data.status + '<br>';
+                
+                nodeInfo.innerHTML = html;
+                infoPanel.style.display = 'block';
+            });
+            
+            // Event-Handler für Hintergrund-Klick
+            cy.on('tap', function(event) {
+                if (event.target === cy) {
+                    document.getElementById('info-panel').style.display = 'none';
+                }
+            });
+            
+            // Tooltip für Node-Hover
+            cy.on('mouseover', 'node', function(event) {
+                var node = event.target;
+                var pos = node.renderedPosition();
+                var label = node.data('label');
+                
+                // Erstelle Tooltip
+                var tooltip = document.createElement('div');
+                tooltip.id = 'node-tooltip';
+                tooltip.innerHTML = label;
+                tooltip.style.cssText = `
+                    position: absolute;
+                    background: #333;
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 3px;
+                    font-size: 12px;
+                    z-index: 1000;
+                    pointer-events: none;
+                    left: ${pos.x + 20}px;
+                    top: ${pos.y - 30}px;
+                `;
+                
+                document.body.appendChild(tooltip);
+            });
+            
+            cy.on('mouseout', 'node', function(event) {
+                var tooltip = document.getElementById('node-tooltip');
+                if (tooltip) {
+                    tooltip.remove();
+                }
+            });
+        });
+        
+        function resetView() {
+            cy.fit();
+            cy.center();
+        }
+        
+        function fitToScreen() {
+            cy.fit();
+        }
+        
+        function toggleLayout() {
+            if (currentLayout === 'dagre') {
+                currentLayout = 'circle';
+                cy.layout({
+                    name: 'circle',
+                    padding: 20
+                }).run();
+            } else if (currentLayout === 'circle') {
+                currentLayout = 'grid';
+                cy.layout({
+                    name: 'grid',
+                    padding: 20
+                }).run();
+            } else {
+                currentLayout = 'dagre';
+                cy.layout({
+                    name: 'dagre',
+                    directed: true,
+                    padding: 20,
+                    rankDir: 'TB'
+                }).run();
+            }
+        }
+        
+        // Fallback if dagre doesn't work
+        function fallbackLayout() {
+            if (cy.nodes().length === 0) {
+                console.error('No nodes found in graph');
+                return;
+            }
+            
+            cy.layout({
+                name: 'breadthfirst',
+                directed: true,
+                padding: 20
+            }).run();
+        }
+        
+        // Try fallback after 2 seconds if graph is empty
+        setTimeout(function() {
+            if (cy && cy.nodes().length === 0) {
+                console.log('No nodes detected, trying fallback...');
+                fallbackLayout();
+            }
+        }, 2000);
+        
+        function exportImage() {
+            var png64 = cy.png({
+                output: 'base64uri',
+                bg: 'white',
+                full: true,
+                scale: 2
+            });
+            
+            var link = document.createElement('a');
+            link.download = 'graph.png';
+            link.href = png64;
+            link.click();
+        }
+    </script>
+</body>
+</html>
