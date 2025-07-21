@@ -267,8 +267,125 @@ class CytoscapeVisualizer:
             font-size: 14px;
         }}
         
+        select {{
+            background-color: #4ECDC4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 200px;
+        }}
+        
+        select option {{
+            background-color: white;
+            color: black;
+            padding: 5px;
+        }}
+        
         button:hover {{
             background-color: #45B7D1;
+        }}
+        
+        .edit-controls {{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }}
+        
+        .edit-controls button {{
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            background-color: #27AE60;
+        }}
+        
+        .edit-controls button:hover {{
+            background-color: #2ECC71;
+        }}
+        
+        .edit-controls button.delete {{
+            background-color: #E74C3C;
+        }}
+        
+        .edit-controls button.delete:hover {{
+            background-color: #C0392B;
+        }}
+        
+        .modal {{
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }}
+        
+        .modal-content {{
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            width: 400px;
+            max-width: 90%;
+        }}
+        
+        .modal-content h3 {{
+            margin-top: 0;
+        }}
+        
+        .modal-content input, .modal-content select, .modal-content textarea {{
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }}
+        
+        .modal-content textarea {{
+            height: 100px;
+            resize: vertical;
+        }}
+        
+        .modal-buttons {{
+            text-align: right;
+            margin-top: 20px;
+        }}
+        
+        .modal-buttons button {{
+            margin-left: 10px;
+        }}
+        
+        .context-menu {{
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: none;
+        }}
+        
+        .context-menu-item {{
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }}
+        
+        .context-menu-item:hover {{
+            background-color: #f5f5f5;
         }}
         
         .info-panel {{
@@ -315,6 +432,29 @@ class CytoscapeVisualizer:
             font-size: 12px;
             color: #333;
         }}
+        
+        .legend-edge {{
+            width: 30px;
+            height: 3px;
+            margin-right: 10px;
+            border-radius: 2px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }}
+        
+        .legend-edge::after {{
+            content: '';
+            position: absolute;
+            right: -3px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid currentColor;
+            border-top: 3px solid transparent;
+            border-bottom: 3px solid transparent;
+        }}
     </style>
 </head>
 <body>
@@ -323,8 +463,18 @@ class CytoscapeVisualizer:
     <div class="controls">
         <button onclick="resetView()">🔄 Ansicht zurücksetzen</button>
         <button onclick="fitToScreen()">🔍 An Bildschirm anpassen</button>
-        <button onclick="toggleLayout()">📐 Layout wechseln</button>
+        <select id="layout-select" onchange="changeLayout()">
+            <option value="0">📐 Dagre (Hierarchisch)</option>
+            <option value="1">🌳 Breadth-First (Baum)</option>
+            <option value="2">⭕ Kreis</option>
+            <option value="3">🎯 Konzentrisch</option>
+            <option value="4">⏹️ Gitter</option>
+            <option value="5">🎲 Zufällig</option>
+            <option value="6">📌 Voreinstellung</option>
+            <option value="7">🔗 COSE (Kraft-basiert)</option>
+        </select>
         <button onclick="exportImage()">📸 Bild exportieren</button>
+        <button onclick="toggleEditMode()">✏️ Edit-Modus</button>
     </div>
     
     <div id="cy"></div>
@@ -332,6 +482,75 @@ class CytoscapeVisualizer:
     <div id="info-panel" class="info-panel">
         <h3>Knoten-Information</h3>
         <div id="node-info"></div>
+    </div>
+    
+    <div id="edit-controls" class="edit-controls" style="display: none;">
+        <h4>Edit-Modus</h4>
+        <button onclick="addNode()">➕ Knoten hinzufügen</button>
+        <button onclick="addEdge()">🔗 Kante hinzufügen</button>
+        <button onclick="deleteSelected()" class="delete">🗑️ Löschen</button>
+        <button onclick="editSelected()">✏️ Bearbeiten</button>
+        <button onclick="saveGraph()">💾 Speichern</button>
+    </div>
+    
+    <div id="context-menu" class="context-menu">
+        <div class="context-menu-item" onclick="editNode()">Bearbeiten</div>
+        <div class="context-menu-item" onclick="deleteNode()">Löschen</div>
+        <div class="context-menu-item" onclick="addConnection()">Verbindung hinzufügen</div>
+    </div>
+    
+    <!-- Modal für Knoten-Bearbeitung -->
+    <div id="node-modal" class="modal">
+        <div class="modal-content">
+            <h3>Knoten bearbeiten</h3>
+            <label>Name:</label>
+            <input type="text" id="node-name" placeholder="Knoten-Name">
+            <label>Typ:</label>
+            <select id="node-type">
+                <option value="objective">Ziel</option>
+                <option value="project">Projekt</option>
+                <option value="task">Aufgabe</option>
+                <option value="actor">Akteur</option>
+                <option value="object">Objekt</option>
+                <option value="knowledge">Wissen</option>
+                <option value="budget">Budget</option>
+            </select>
+            <label>Beschreibung:</label>
+            <textarea id="node-description" placeholder="Beschreibung"></textarea>
+            <label>Geschätzte Stunden:</label>
+            <input type="number" id="node-hours" placeholder="0">
+            <label>Status:</label>
+            <select id="node-status">
+                <option value="pending">Ausstehend</option>
+                <option value="in_progress">In Bearbeitung</option>
+                <option value="completed">Abgeschlossen</option>
+            </select>
+            <div class="modal-buttons">
+                <button onclick="closeModal()">Abbrechen</button>
+                <button onclick="saveNode()">Speichern</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal für Kanten-Bearbeitung -->
+    <div id="edge-modal" class="modal">
+        <div class="modal-content">
+            <h3>Kante hinzufügen</h3>
+            <label>Von Knoten:</label>
+            <select id="edge-source"></select>
+            <label>Zu Knoten:</label>
+            <select id="edge-target"></select>
+            <label>Beziehungstyp:</label>
+            <select id="edge-type">
+                <option value="CONTAINS">Enthält</option>
+                <option value="REQUIRES">Benötigt</option>
+                <option value="PRECEDES">Geht voraus</option>
+            </select>
+            <div class="modal-buttons">
+                <button onclick="closeModal()">Abbrechen</button>
+                <button onclick="saveEdge()">Speichern</button>
+            </div>
+        </div>
     </div>
     
     <div class="legend">
@@ -364,11 +583,28 @@ class CytoscapeVisualizer:
             <div class="legend-color" style="background-color: #F39C12;"><i class="fas fa-dollar-sign"></i></div>
             <span>Budget</span>
         </div>
+        
+        <h4>Kanten (Beziehungen)</h4>
+        <div class="legend-item">
+            <div class="legend-edge" style="background-color: #2C3E50; color: #2C3E50;"></div>
+            <span>Enthält (CONTAINS)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-edge" style="background-color: #E74C3C; color: #E74C3C;"></div>
+            <span>Benötigt (REQUIRES)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-edge" style="background-color: #9B59B6; color: #9B59B6;"></div>
+            <span>Geht voraus (PRECEDES)</span>
+        </div>
     </div>
     
     <script>
         var cy;
         var currentLayout = 'dagre';
+        var editMode = false;
+        var selectedNode = null;
+        var nextNodeId = 1;
         
         document.addEventListener('DOMContentLoaded', function() {{
             // Register dagre extension
@@ -399,23 +635,42 @@ class CytoscapeVisualizer:
                 var node = event.target;
                 var data = node.data();
                 
-                var infoPanel = document.getElementById('info-panel');
-                var nodeInfo = document.getElementById('node-info');
-                
-                var html = '<strong>' + data.label + '</strong><br>';
-                html += 'Typ: ' + data.type + '<br>';
-                if (data.description) html += 'Beschreibung: ' + data.description + '<br>';
-                if (data.estimated_hours) html += 'Geschätzte Stunden: ' + data.estimated_hours + '<br>';
-                if (data.status) html += 'Status: ' + data.status + '<br>';
-                
-                nodeInfo.innerHTML = html;
-                infoPanel.style.display = 'block';
+                if (editMode) {{
+                    selectedNode = node;
+                    cy.nodes().removeClass('selected');
+                    node.addClass('selected');
+                }} else {{
+                    var infoPanel = document.getElementById('info-panel');
+                    var nodeInfo = document.getElementById('node-info');
+                    
+                    var html = '<strong>' + data.label + '</strong><br>';
+                    html += 'Typ: ' + data.type + '<br>';
+                    if (data.description) html += 'Beschreibung: ' + data.description + '<br>';
+                    if (data.estimated_hours) html += 'Geschätzte Stunden: ' + data.estimated_hours + '<br>';
+                    if (data.status) html += 'Status: ' + data.status + '<br>';
+                    
+                    nodeInfo.innerHTML = html;
+                    infoPanel.style.display = 'block';
+                }}
             }});
             
             // Event-Handler für Hintergrund-Klick
             cy.on('tap', function(event) {{
                 if (event.target === cy) {{
                     document.getElementById('info-panel').style.display = 'none';
+                    hideContextMenu();
+                    if (editMode) {{
+                        selectedNode = null;
+                        cy.nodes().removeClass('selected');
+                    }}
+                }}
+            }});
+            
+            // Rechtsklick für Context-Menu
+            cy.on('cxttap', 'node', function(event) {{
+                if (editMode) {{
+                    selectedNode = event.target;
+                    showContextMenu(event.renderedPosition || event.position);
                 }}
             }});
             
@@ -462,21 +717,111 @@ class CytoscapeVisualizer:
             cy.fit();
         }}
         
-        function toggleLayout() {{
-            if (currentLayout === 'dagre') {{
-                currentLayout = 'circle';
-                cy.layout({{
+        var layouts = [
+            {{
+                name: 'dagre',
+                title: 'Dagre (Hierarchisch)',
+                options: {{
+                    name: 'dagre',
+                    directed: true,
+                    padding: 20,
+                    rankDir: 'TB',
+                    ranker: 'longest-path'
+                }}
+            }},
+            {{
+                name: 'breadthfirst',
+                title: 'Breadth-First (Baum)',
+                options: {{
+                    name: 'breadthfirst',
+                    directed: true,
+                    padding: 20,
+                    spacingFactor: 1.2
+                }}
+            }},
+            {{
+                name: 'circle',
+                title: 'Kreis',
+                options: {{
                     name: 'circle',
-                    padding: 20
-                }}).run();
-            }} else if (currentLayout === 'circle') {{
-                currentLayout = 'grid';
-                cy.layout({{
+                    padding: 20,
+                    radius: 200
+                }}
+            }},
+            {{
+                name: 'concentric',
+                title: 'Konzentrisch',
+                options: {{
+                    name: 'concentric',
+                    padding: 20,
+                    minNodeSpacing: 50,
+                    concentric: function(node) {{
+                        return node.degree();
+                    }}
+                }}
+            }},
+            {{
+                name: 'grid',
+                title: 'Gitter',
+                options: {{
                     name: 'grid',
+                    padding: 20,
+                    rows: undefined,
+                    cols: undefined
+                }}
+            }},
+            {{
+                name: 'random',
+                title: 'Zufällig',
+                options: {{
+                    name: 'random',
                     padding: 20
-                }}).run();
-            }} else {{
-                currentLayout = 'dagre';
+                }}
+            }},
+            {{
+                name: 'preset',
+                title: 'Voreinstellung',
+                options: {{
+                    name: 'preset',
+                    padding: 20
+                }}
+            }},
+            {{
+                name: 'cose',
+                title: 'COSE (Kraft-basiert)',
+                options: {{
+                    name: 'cose',
+                    padding: 20,
+                    nodeRepulsion: 400000,
+                    nodeOverlap: 10,
+                    idealEdgeLength: 100,
+                    edgeElasticity: 100,
+                    nestingFactor: 5,
+                    gravity: 80,
+                    numIter: 1000,
+                    initialTemp: 200,
+                    coolingFactor: 0.95,
+                    minTemp: 1.0
+                }}
+            }}
+        ];
+        
+        var currentLayoutIndex = 0;
+        
+        function changeLayout() {{
+            var select = document.getElementById('layout-select');
+            var layoutIndex = parseInt(select.value);
+            var layout = layouts[layoutIndex];
+            
+            console.log('Wechsle zu Layout:', layout.title);
+            
+            try {{
+                cy.layout(layout.options).run();
+                currentLayout = layout.name;
+                currentLayoutIndex = layoutIndex;
+            }} catch (error) {{
+                console.error('Layout-Fehler:', error);
+                // Fallback zu dagre
                 cy.layout({{
                     name: 'dagre',
                     directed: true,
@@ -484,6 +829,13 @@ class CytoscapeVisualizer:
                     rankDir: 'TB'
                 }}).run();
             }}
+        }}
+        
+        function toggleLayout() {{
+            currentLayoutIndex = (currentLayoutIndex + 1) % layouts.length;
+            var select = document.getElementById('layout-select');
+            select.value = currentLayoutIndex;
+            changeLayout();
         }}
         
         // Fallback if dagre doesn't work
@@ -521,6 +873,240 @@ class CytoscapeVisualizer:
             link.href = png64;
             link.click();
         }}
+        
+        // Edit-Modus Funktionen
+        function toggleEditMode() {{
+            editMode = !editMode;
+            var editControls = document.getElementById('edit-controls');
+            var button = event.target;
+            
+            if (editMode) {{
+                editControls.style.display = 'block';
+                button.textContent = '👀 Ansicht-Modus';
+                button.style.backgroundColor = '#E74C3C';
+            }} else {{
+                editControls.style.display = 'none';
+                button.textContent = '✏️ Edit-Modus';
+                button.style.backgroundColor = '#4ECDC4';
+                selectedNode = null;
+                cy.nodes().removeClass('selected');
+            }}
+        }}
+        
+        function addNode() {{
+            document.getElementById('node-modal').style.display = 'block';
+            document.getElementById('node-name').value = '';
+            document.getElementById('node-type').value = 'task';
+            document.getElementById('node-description').value = '';
+            document.getElementById('node-hours').value = '';
+            document.getElementById('node-status').value = 'pending';
+        }}
+        
+        function editSelected() {{
+            if (!selectedNode) {{
+                alert('Bitte wählen Sie einen Knoten aus.');
+                return;
+            }}
+            
+            var data = selectedNode.data();
+            document.getElementById('node-modal').style.display = 'block';
+            document.getElementById('node-name').value = data.label || '';
+            document.getElementById('node-type').value = data.type || 'task';
+            document.getElementById('node-description').value = data.description || '';
+            document.getElementById('node-hours').value = data.estimated_hours || '';
+            document.getElementById('node-status').value = data.status || 'pending';
+        }}
+        
+        function deleteSelected() {{
+            if (!selectedNode) {{
+                alert('Bitte wählen Sie einen Knoten aus.');
+                return;
+            }}
+            
+            if (confirm('Knoten wirklich löschen?')) {{
+                cy.remove(selectedNode);
+                selectedNode = null;
+            }}
+        }}
+        
+        function addEdge() {{
+            populateNodeSelects();
+            document.getElementById('edge-modal').style.display = 'block';
+        }}
+        
+        function saveNode() {{
+            var name = document.getElementById('node-name').value;
+            var type = document.getElementById('node-type').value;
+            var description = document.getElementById('node-description').value;
+            var hours = document.getElementById('node-hours').value;
+            var status = document.getElementById('node-status').value;
+            
+            if (!name) {{
+                alert('Bitte geben Sie einen Namen ein.');
+                return;
+            }}
+            
+            var nodeData = {{
+                label: name,
+                type: type,
+                description: description,
+                estimated_hours: hours ? parseInt(hours) : 0,
+                status: status,
+                icon: getIconForType(type)
+            }};
+            
+            if (selectedNode) {{
+                // Bearbeitung
+                selectedNode.data(nodeData);
+            }} else {{
+                // Neuer Knoten
+                var nodeId = 'node_' + nextNodeId++;
+                nodeData.id = nodeId;
+                
+                cy.add({{
+                    data: nodeData,
+                    classes: type
+                }});
+            }}
+            
+            closeModal();
+        }}
+        
+        function saveEdge() {{
+            var source = document.getElementById('edge-source').value;
+            var target = document.getElementById('edge-target').value;
+            var type = document.getElementById('edge-type').value;
+            
+            if (!source || !target) {{
+                alert('Bitte wählen Sie Quell- und Zielknoten aus.');
+                return;
+            }}
+            
+            if (source === target) {{
+                alert('Quell- und Zielknoten müssen unterschiedlich sein.');
+                return;
+            }}
+            
+            var edgeId = source + '-' + target;
+            
+            cy.add({{
+                data: {{
+                    id: edgeId,
+                    source: source,
+                    target: target,
+                    relationship: type
+                }},
+                classes: type
+            }});
+            
+            closeModal();
+        }}
+        
+        function closeModal() {{
+            document.getElementById('node-modal').style.display = 'none';
+            document.getElementById('edge-modal').style.display = 'none';
+        }}
+        
+        function showContextMenu(position) {{
+            var menu = document.getElementById('context-menu');
+            menu.style.left = position.x + 'px';
+            menu.style.top = position.y + 'px';
+            menu.style.display = 'block';
+        }}
+        
+        function hideContextMenu() {{
+            document.getElementById('context-menu').style.display = 'none';
+        }}
+        
+        function editNode() {{
+            hideContextMenu();
+            editSelected();
+        }}
+        
+        function deleteNode() {{
+            hideContextMenu();
+            deleteSelected();
+        }}
+        
+        function addConnection() {{
+            hideContextMenu();
+            addEdge();
+        }}
+        
+        function populateNodeSelects() {{
+            var sourceSelect = document.getElementById('edge-source');
+            var targetSelect = document.getElementById('edge-target');
+            
+            sourceSelect.innerHTML = '';
+            targetSelect.innerHTML = '';
+            
+            cy.nodes().forEach(function(node) {{
+                var option = document.createElement('option');
+                option.value = node.id();
+                option.textContent = node.data('label');
+                sourceSelect.appendChild(option.cloneNode(true));
+                targetSelect.appendChild(option);
+            }});
+        }}
+        
+        function getIconForType(type) {{
+            var iconMap = {{
+                'objective': '\\f3a5',
+                'project': '\\f07b',
+                'task': '\\f0ae',
+                'actor': '\\f007',
+                'object': '\\f1b2',
+                'knowledge': '\\f02d',
+                'budget': '\\f155'
+            }};
+            return iconMap[type] || '\\f128';
+        }}
+        
+        function saveGraph() {{
+            var elements = cy.elements().jsons();
+            var graphData = {{
+                elements: elements,
+                timestamp: new Date().toISOString()
+            }};
+            
+            var dataStr = JSON.stringify(graphData, null, 2);
+            var dataBlob = new Blob([dataStr], {{type: 'application/json'}});
+            
+            var link = document.createElement('a');
+            link.download = 'edited_graph.json';
+            link.href = URL.createObjectURL(dataBlob);
+            link.click();
+            
+            console.log('Graph gespeichert:', graphData);
+        }}
+        
+        // Modal schließen bei Klick außerhalb
+        window.onclick = function(event) {{
+            var nodeModal = document.getElementById('node-modal');
+            var edgeModal = document.getElementById('edge-modal');
+            
+            if (event.target === nodeModal) {{
+                nodeModal.style.display = 'none';
+            }}
+            if (event.target === edgeModal) {{
+                edgeModal.style.display = 'none';
+            }}
+        }}
+        
+        // Finde höchste Node-ID für nextNodeId
+        document.addEventListener('DOMContentLoaded', function() {{
+            setTimeout(function() {{
+                var maxId = 0;
+                cy.nodes().forEach(function(node) {{
+                    var id = node.id();
+                    if (id.startsWith('node_')) {{
+                        var num = parseInt(id.substring(5));
+                        if (num > maxId) maxId = num;
+                    }}
+                }});
+                nextNodeId = maxId + 1;
+            }}, 100);
+        }});
     </script>
 </body>
 </html>
@@ -560,6 +1146,47 @@ class CytoscapeVisualizer:
         
         print(f"💾 Cytoscape.js-JSON exportiert: {output_file}")
         return output_file
+    
+    def create_visualization_from_cytoscape(self, elements: List[Dict[str, Any]], 
+                                          output_file: str = "graph_cytoscape.html",
+                                          title: str = "Editierter Graph", 
+                                          open_browser: bool = True) -> str:
+        """Erstellt Cytoscape.js-Visualisierung direkt aus Cytoscape-Elementen"""
+        
+        # HTML generieren
+        html_content = self.generate_html_template(elements, title)
+        
+        # Datei schreiben
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        
+        print(f"🌐 Cytoscape.js-Visualisierung aus editiertem Graph erstellt: {output_file}")
+        
+        # Browser öffnen
+        if open_browser:
+            file_path = os.path.abspath(output_file)
+            webbrowser.open(f"file://{file_path}")
+        
+        return output_file
+
+
+def load_cytoscape_from_file(filepath: str) -> List[Dict[str, Any]]:
+    """Lädt eine editierte Cytoscape.js-JSON-Datei"""
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        # Prüfe ob es eine editierte Graph-Datei ist
+        if 'elements' in data and isinstance(data['elements'], list):
+            print(f"✅ Cytoscape-Graph geladen: {len(data['elements'])} Elemente")
+            return data['elements']
+        
+        # Fallback: Versuche als normale Plan-Datei zu laden
+        print("⚠️ Nicht als Cytoscape-Graph erkannt, versuche als Plan-Datei...")
+        return []
+    except Exception as e:
+        print(f"❌ Fehler beim Laden der Cytoscape-Datei: {e}")
+        return []
 
 
 def create_test_graph() -> nx.DiGraph:
@@ -594,9 +1221,10 @@ def main():
     print("\nOptionen:")
     print("1. Test-Graph verwenden")
     print("2. Beispiel-Plan verwenden")
-    print("3. JSON-Datei laden")
+    print("3. JSON-Datei laden (Plan-Format)")
+    print("4. Editierte Cytoscape.js-JSON laden")
     
-    choice = input("Wählen Sie eine Option (1-3): ").strip()
+    choice = input("Wählen Sie eine Option (1-4): ").strip()
     
     if choice == "1":
         print("🧪 Verwende Test-Graph...")
@@ -626,6 +1254,31 @@ def main():
         converter = PlanGraphConverter()
         graph = converter.json_to_networkx(plan)
         title = f"Graph aus {os.path.basename(filepath)}"
+        
+    elif choice == "4":
+        filepath = input("Geben Sie den Pfad zur editierten Cytoscape.js-JSON-Datei ein: ").strip()
+        if not filepath:
+            print("❌ Kein Dateipfad angegeben!")
+            return
+        
+        print(f"📄 Lade editierten Graph aus {filepath}...")
+        elements = load_cytoscape_from_file(filepath)
+        
+        if not elements:
+            print("❌ Konnte editierten Graph nicht laden!")
+            return
+        
+        # Direkte Visualisierung ohne NetworkX-Konvertierung
+        visualizer = CytoscapeVisualizer()
+        output_file = input("Output-Datei (Enter für 'edited_graph.html'): ").strip()
+        if not output_file:
+            output_file = "edited_graph.html"
+        
+        title = f"Editierter Graph aus {os.path.basename(filepath)}"
+        visualizer.create_visualization_from_cytoscape(elements, output_file, title)
+        
+        print(f"\n✅ Fertig! Öffne {output_file} in deinem Browser.")
+        return
         
     else:
         print("❌ Ungültige Auswahl!")
