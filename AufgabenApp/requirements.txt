@@ -32,9 +32,13 @@ mypy>=1.4.0
 # Optional: Enhanced Graph Layouts (requires Graphviz installation)
 # pygraphviz>=1.11
 
-# Optional: FastAPI für Web-Backend (wenn gewünscht)
-fastapi>=0.100.0
-uvicorn[standard]>=0.22.0
+# Web Framework (Required for automated interface)
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+websockets>=11.0.3
+python-multipart>=0.0.6
+aiofiles>=23.2.1
+pydantic>=2.5.0
 
 # Optional: GraphQL Support
 strawberry-graphql>=0.200.0

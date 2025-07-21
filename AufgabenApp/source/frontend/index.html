@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Automatisiertes Planungs-Interface</title>
+    
+    <!-- External Dependencies -->
+    <script src="https://unpkg.com/cytoscape@3.26.0/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/dagre@0.8.5/dist/dagre.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-dagre@2.5.0/cytoscape-dagre.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            height: calc(100vh - 200px);
+        }
+
+        .sidebar {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+
+        .graph-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .status-disconnected {
+            background: #fed7d7;
+            color: #e53e3e;
+        }
+
+        .status-connected {
+            background: #c6f6d5;
+            color: #38a169;
+        }
+
+        .status-processing {
+            background: #feebc8;
+            color: #ed8936;
+        }
+
+        #cy {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: white;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .graph-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .graph-info h4 {
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+
+        .graph-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 5px;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f4f6;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fed7d7;
+            color: #e53e3e;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .success-message {
+            background: #c6f6d5;
+            color: #38a169;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            border-left: 4px solid #38a169;
+        }
+
+        .version-indicator {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .graph-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .graph-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .graph-item:hover {
+            background: #f8fafc;
+        }
+
+        .graph-item.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .graph-item-info {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 Automatisiertes Planungs-Interface</h1>
+            <p>LLM-basierte Projektplanung mit Real-time Neo4j Integration</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Connection Status -->
+                <div id="connection-status" class="status-indicator status-disconnected">
+                    <i class="fas fa-wifi"></i>
+                    <span>Verbindung wird hergestellt...</span>
+                </div>
+
+                <!-- Plan Generation Form -->
+                <div class="form-section">
+                    <h3><i class="fas fa-magic"></i> Plan Generieren</h3>
+                    <form id="plan-form">
+                        <div class="form-group">
+                            <label for="goal-input">Ziel / Projektbeschreibung:</label>
+                            <textarea 
+                                id="goal-input" 
+                                placeholder="Beschreiben Sie Ihr Projekt oder Ziel...&#10;Beispiel: 'Entwicklung einer mobilen App für Aufgabenverwaltung'"
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="llm-provider">LLM Provider:</label>
+                            <select id="llm-provider">
+                                <option value="ollama">🏠 Ollama (Lokal)</option>
+                                <option value="claude">🤖 Claude API</option>
+                                <option value="chatgpt">🧠 ChatGPT API</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn" id="generate-btn">
+                            <i class="fas fa-rocket"></i> Plan Generieren
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Graph Management -->
+                <div class="form-section">
+                    <h3><i class="fas fa-project-diagram"></i> Graph Management</h3>
+                    
+                    <div class="form-group">
+                        <button class="btn btn-secondary" id="save-graph-btn" disabled>
+                            <i class="fas fa-save"></i> Graph Speichern
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn" id="load-graphs-btn">
+                            <i class="fas fa-folder-open"></i> Graphen Laden
+                        </button>
+                    </div>
+
+                    <div id="graph-list" class="graph-list" style="display: none;">
+                        <!-- Dynamisch gefüllt -->
+                    </div>
+                </div>
+
+                <!-- Graph Info -->
+                <div class="graph-info" id="graph-info" style="display: none;">
+                    <h4>📊 Graph Information</h4>
+                    <div class="graph-info-item">
+                        <span>Knoten:</span>
+                        <span id="nodes-count">0</span>
+                    </div>
+                    <div class="graph-info-item">
+                        <span>Kanten:</span>
+                        <span id="edges-count">0</span>
+                    </div>
+                    <div class="graph-info-item">
+                        <span>Version:</span>
+                        <span id="current-version">-</span>
+                    </div>
+                    <div class="graph-info-item">
+                        <span>Quelle:</span>
+                        <span id="graph-source">-</span>
+                    </div>
+                </div>
+
+                <!-- Neo4j Status -->
+                <div class="form-section">
+                    <h3><i class="fas fa-database"></i> Neo4j Status</h3>
+                    <div id="neo4j-status" class="status-indicator status-disconnected">
+                        <i class="fas fa-database"></i>
+                        <span>Prüfe Verbindung...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph Visualization -->
+            <div class="graph-container">
+                <div class="version-indicator" id="version-indicator" style="display: none;">
+                    Version <span id="version-number">1</span> - <span id="version-source">LLM Generated</span>
+                </div>
+                
+                <div class="controls">
+                    <button class="control-btn" id="fit-btn" title="An Bildschirm anpassen">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </button>
+                    <button class="control-btn" id="layout-btn" title="Layout ändern">
+                        <i class="fas fa-project-diagram"></i>
+                    </button>
+                    <button class="control-btn" id="edit-btn" title="Edit-Modus" data-edit="false">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="control-btn" id="export-btn" title="Als Bild exportieren">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+
+                <div id="cy"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="loading-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Plan wird generiert...</h3>
+            </div>
+            <div class="loading">
+                <div class="spinner"></div>
+                <span>LLM arbeitet an Ihrem Plan...</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="error-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('error-modal')">×</button>
+            <div class="modal-header">
+                <h3>❌ Fehler</h3>
+            </div>
+            <div id="error-message" class="error-message">
+                Ein unerwarteter Fehler ist aufgetreten.
+            </div>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('success-modal')">×</button>
+            <div class="modal-header">
+                <h3>✅ Erfolgreich</h3>
+            </div>
+            <div id="success-message" class="success-message">
+                Operation erfolgreich abgeschlossen.
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
